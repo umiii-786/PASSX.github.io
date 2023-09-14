@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <style>
+
+    table {
+      border: 2px solid black;
+      width: 100%;
+      text-align: center;
+    }
+
+    table tr th {
+      font-size: 18px;
+    }
+
+    table tr td {
+      border: 2px solid black;
+    }
+
+    table tbody tr {
+      height: 50px;
+    }
+
+    .copy {
+      width: 15px;
+      margin-left: 3px;
+      cursor: pointer;
+      position: relative;
+      top: -6px;
+      right: 2px;
+    }
+
+    .items {
+      width: 60%;
+    }
+
+    .input {
+      border: none;
+      text-align: center;
+      width: 50px;
+    }
+    .getinfo{
+     width: 250px;
+    }
+
+    @media only screen and (max-width:800px) {
+      .items {
+        width: 100%;
+      }
+    }
+    label{
+      width: 250px;
+    }
+    /* .remove{
+      width: 50px;
+    } */
+  </style>
+
+
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-success text-white">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#">PASS_MANAGER</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="border:1px solid white">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <div class="container my-4">
+    <h1 class="heading">Password Managers</h1>
+    <P>Make your messages unreadable and secure, in addition to firewere and antivirus, NewGenSec. The system that
+      encrypts your messages and makes them unreadable, no password no reading. No transmission to server. No log
+      policy. Totally untrackable.</P>
+    <h3 class="my-2">Your Passwords <span id="showcopy"></span></h3>
+    <div class="items">
+      <table>
+        <thead>
+          <tr>
+            <th>website </th>
+            <th>username </th>
+            <th>password </th>
+            <th>delete</th>
+          </tr>
+        </thead>
+
+        <tbody id="table-body">
+          <tr class="rows">
+            <td><span class="text">facebook</span><img src="copyimage.png" alt="copy" class="copy" onclick="copyText(this)">
+            </td>
+            <td><span class="text">jattt</span> <img src="copyimage.png" alt="copy" class="copy" onclick="copyText(this)">
+            </td>
+            <td><input type="password" value="456788" class="input" id="text3"><img src="copyimage.png" alt="copy"
+                class="copy" onclick="copyText(this,3)"></td>
+            <td><button class="btn btn-danger remove" disabled onclick="remove(this)">delete</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container">
+
+    <div class="w-25 d-flex flex-column mt-5">
+      <label for="website_name" class="my-1">
+        enter website name
+      </label>
+      <input type="text"  class="getinfo">
+      <label for="username" class="my-1">
+        enter your username
+      </label>
+      <input type="username"  class="getinfo">
+
+      <label for="password" class="my-1">
+        enter your password
+      </label>
+      <input type="password"  class="getinfo">
+    </div>
+    <button class="btn btn-success mt-3" onclick="add()">submit</button>
+  </div>
+  <script>
+    let tbody = document.getElementById('table-body');
+    let input = document.getElementsByClassName("getinfo");
+    let j = 6
+
+    //function which add the element in the table 
+    function add() {
+      let website_name = input[0].value;
+      let username = input[1].value;
+      let pass = input[2].value;
+      if(website_name=="" && username=="" && pass==""){
+      }
+      else{
+        console.log("hello from else")
+        input[0].value = "";
+        input[1].value = "";
+        input[2].value = "";
+        let row = document.createElement('tr');
+        row.setAttribute('class', `rows`);
+        row.innerHTML = ` <td><span class="text">${website_name} </span><img src="copyimage.png" alt="copy" class="copy" onclick="copyText(this)"></td>
+        <td><span class="text">${username}</span>  <img src="copyimage.png" alt="copy" class="copy" onclick="copyText(this)"></td>
+        <td><input type="password"  value=${pass} class="input" id="text${j}"> <img src="copyimage.png" alt="copy" class="copy"  onclick="copyText(this,${j})"></td>
+        <td><button class="btn btn-danger remove" onclick="remove(this)">delete</button></td>`
+        
+        tbody.append(row);
+        j = j + 3;
+
+      }
+    }
+
+
+
+
+// function which remove the element when we click the remove button 
+    function remove(e) {
+      
+      let td=e.parentElement
+      let row =td.parentElement
+      row.remove();
+    }
+
+
+
+
+// function which copy the text when we click the copy image
+    let showcopy = document.getElementById("showcopy");
+    function copyText(e,k) {
+      let text;
+      if (k > 1 && k % 3 == 0) {
+        console.log(k);
+       text = document.getElementById(`text${k}`).value;
+      }
+      else {
+          text =e.parentElement.innerText;
+      }
+      let textarea = document.createElement('textarea');
+      textarea.textContent = text;
+      document.body.append(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      showcopy.innerText = "( Copied )";
+      textarea.remove();
+      setInterval(() => {
+        showcopy.innerText = "";
+      }, 2000)
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
